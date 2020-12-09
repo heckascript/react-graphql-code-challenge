@@ -1,0 +1,30 @@
+.user-list {
+  list-style-type: none;
+  padding: 0px;
+  border: 2px #EEE solid;
+}
+
+.user-list-item {
+  padding: 10px;
+  border: 2px #EEE solid;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.user-list-item span {
+  padding: 4px 0;
+}
+
+@media screen and (max-width: 800px) {
+  .user-list-item span {
+    flex-basis: 50%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .user-list-item {
+    flex-direction: column;
+  }
+}

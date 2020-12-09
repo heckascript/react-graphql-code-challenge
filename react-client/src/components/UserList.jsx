@@ -1,6 +1,8 @@
 import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 
+import style from '../styles/UserList.module.css';
+
 export const ALL_USERS = gql`
   query users {
     users {
