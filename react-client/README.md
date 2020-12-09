@@ -16,15 +16,28 @@ This task is for demonstrating your understanding of using GraphQL in React and 
 
 Client is available @ `http://localhost:3000/`
 
+### Development:
+
+1. Make your changes
+2. Run `yarn test`
+3. Fix failutes, and Repeat ^.^
+
 ### Challenge:
 
 1. Connect to the `graphql-server` with [Apollo Client](https://www.apollographql.com/docs/react/).<br/>
-Note: `apollo-boost`, and `graphql` are already installed.
+Note: ~`apollo-boost`~ `@apollo/client`, and `graphql` are already installed.
 ```
-import ApolloClient from 'apollo-boost';
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache
+} from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: 'http://localhost:4000'
+  })
 });
 ```
 
