@@ -16,11 +16,15 @@ function WithApolloClient(AppComponent) {
     })
   });
 
-  return (
-    <ApolloProvider client={client}>
-      <AppComponent/>
-    </ApolloProvider>
-  );
+  const WrappedComponent = props => {
+    return (
+      <ApolloProvider client={client}>
+        <AppComponent {...props}/>
+      </ApolloProvider>
+    );
+  }
+
+  return <WrappedComponent />;
 };
 
 export default WithApolloClient;

@@ -14,8 +14,9 @@ export const ALL_USERS = gql`
   }
 `;
 
-function UserList() {
-  let { loading, error, data } = useQuery(ALL_USERS);
+function UserList(props) {
+  let { query = ALL_USERS } = props;
+  let { loading, error, data } = useQuery(query);
 
   if (loading) {
     return "Loading Users...";

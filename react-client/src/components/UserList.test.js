@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { MockedProvider } from '@apollo/client/testing';
+import { gql } from '@apollo/client';
 import WithApolloClient, { URI } from './WithApolloClient';
 import db from '../../../graphql-server/src/db';
 
@@ -24,7 +25,6 @@ const mockData = [{
     }
   },
 }];
-
 
 // with mocked data
 it('Begins in Loading state, then displays the correct User Data (mocked)', async () => {
@@ -63,7 +63,7 @@ it('Queries the actual GraphQL server (when available)', async () => {
   if (isBackendRunning) {
     const div = document.createElement('div');
     ReactDOM.render(
-      WithApolloClient(UserList),
+      WithApolloClient(() => <UserList />),
       div
     );
 
@@ -82,4 +82,41 @@ it('Queries the actual GraphQL server (when available)', async () => {
     // Fulfilled
     expect(div.textContent.trim()).toEqual(usersString);
   }
+});
+
+
+// invalid query
+const ALL_USERS_WITH_PASSWORD = gql`
+  query users {
+    users {
+      id
+      name
+      email
+      phone
+      password
+    }
+  }
+`;
+
+
+// with an invalid query
+it('Does not allow `password` to be resolved from a Query', async () => {
+  // need to find a way to pass an invalid query
+  const div = document.createElement('div');
+  ReactDOM.render(
+    WithApolloClient(() => <UserList query={ALL_USERS_WITH_PASSWORD}/>),
+    div
+  );
+
+  // Loading
+  expect(div.textContent.trim()).toEqual('Loading Users...');
+
+  await act(async () => { // hard-coded delay, kinda nasty tbh
+    await new Promise(resolve => setTimeout(resolve, 250));
+  });
+
+  const errorString = "Users Query failed with: 'Error: Cannot return null for non-nullable field User.password.', try starting/restarting the graphQL server";
+
+  // Fulfilled, but with an error
+  expect(div.textContent.trim()).toEqual(errorString);
 });
